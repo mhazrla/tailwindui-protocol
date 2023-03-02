@@ -1,0 +1,326 @@
+export const description =
+  'On this page, we’ll dive into the different requirement endpoints you can use to manage requirements programmatically.'
+
+# Requirements
+
+As the name suggests, requirements are a core part of Protocol. On this page, we'll dive into the different requirement endpoints you can use to manage requirements programmatically. We'll look at how to query, create, update, and delete requirements.
+
+## The requirement model
+
+The requirement model contains all the information about your requirements, such as their description.
+
+### Properties
+
+<Properties>
+  <Property name="req_id" type="string">
+    Unique identifier for the requirement.
+  </Property>
+  <Property name="description" type="string">
+    The description for the requirement.
+  </Property>
+</Properties>
+
+---
+
+## List all requirements {{ tag: 'GET', label: '/v1/requirements' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your requirements. By default, a maximum of ten requirements are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of requirements returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/requirements">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/requirements \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.requirements.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.requirements.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->requirements->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "req_id": "WAz8eIbvDR60rouK",
+          "description": "Hello World",
+        },
+        {
+          "req_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a requirement {{ tag: 'POST', label: '/v1/requirements' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new requirement to your requirement list in Protocol. To add a requirement, you must provide their Protocol description.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="description" type="string">
+        The description for the requirement.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/requirements">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/requirements \
+      -H "Authorization: Bearer {token}" \
+      -d description="Hello World" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.requirements.create({
+      description: 'Hello World',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.requirements.create(
+      description="Hello World",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->requirements->create([
+      'description' => 'Hello World',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+       "req_id": "WAz8eIbvDR60rouK",
+        "description": "Hello World",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a requirement {{ tag: 'GET', label: '/v1/requirements/:req_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a requirement by providing their Protocol id. Refer to [the list](#the-requirement-model) at the top of this page to see which properties are included with requirement objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/requirements/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/requirements/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.requirements.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.requirements.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->requirements->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "req_id": "WAz8eIbvDR60rouK",
+      "description": "Hello World",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a requirement {{ tag: 'PUT', label: '/v1/requirements/:req_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a requirement. Currently, the only attribute that can be updated on requirements is the `description` attribute which controls how a requirement appears in your requirement list in Protocol.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="description" type="string">
+        The requirement display name in the requirement list.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/requirements/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/requirements/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d description="Hello World"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.requirements.update('WAz8eIbvDR60rouK', {
+        description: 'Hello World',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.requirements.update("WAz8eIbvDR60rouK", description="Hello World")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->requirements->update('WAz8eIbvDR60rouK', [
+      'description' => 'Hello World',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "req_id": "WAz8eIbvDR60rouK",
+      "description": "Hello World",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a requirement {{ tag: 'DELETE', label: '/v1/requirements/:req_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete requirements from your requirement list in Protocol. Note: This will also delete your conversation with the given requirement.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/requirements/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/requirements/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.requirements.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.requirements.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->requirements->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

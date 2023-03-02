@@ -1,0 +1,391 @@
+export const description =
+  'On this page, we’ll dive into the different material endpoints you can use to manage materials programmatically.'
+
+# Materials
+
+As the name suggests, materials are a core part of Protocol. On this page, we'll dive into the different material endpoints you can use to manage materials programmatically. We'll look at how to query, create, update, and delete materials.
+
+## The material model
+
+The material model contains all the information about your materials, such as their name, description, and date. It also contains a reference to the meeting.
+
+### Properties
+
+<Properties>
+  <Property name="material_id" type="string">
+    Unique identifier for the material.
+  </Property>
+  <Property name="name" type="string">
+    The name for the material.
+  </Property>
+  <Property name="description" type="string">
+    The description for the material.
+  </Property>
+  <Property name="file" type="string">
+    The file for the material.
+  </Property>
+  <Property name="meeting_id" type="string">
+    Unique identifier for the user associated with the material.
+  </Property>
+</Properties>
+
+---
+
+## List all materials {{ tag: 'GET', label: '/v1/materials' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your materials. By default, a maximum of ten materials are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of materials returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/materials">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/materials \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.materials.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.materials.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->materials->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "material_id": "WAz8eIbvDR60rouK",
+          "name": "IoT Essentials",
+          "description": "This course learn about IoT and Microcontroller",
+          "file": "https://assets.protocol.chat/avatars/frank.jpg",
+          "meeting": {
+            "date": "2023-04-25",
+            "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+            },
+          },
+        },
+        {
+          "material_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a material {{ tag: 'POST', label: '/v1/materials' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new material to your material list in Protocol. To add a material, you must provide their Protocol name and description.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The name for the material.
+      </Property>
+      <Property name="description" type="string">
+        The description for the material.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/materials">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/materials \
+      -H "Authorization: Bearer {token}" \
+      -d name="IoT Essentials" \
+      -d description="Connect The World" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.materials.create({
+      name: 'IoT Essentials',
+      description: 'Connect The World',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.materials.create(
+      name="IoT Essentials",
+      description="Connect The World",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->materials->create([
+      'name' => 'IoT Essentials',
+      'description' => 'Connect The World',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "material_id": "WAz8eIbvDR60rouK",
+      "description": "2022-04-26"
+      "media": "https://assets.protocol.chat/avatars/frank.jpg",
+      "meeting": {
+        "date": "2023-04-25",
+        "course": {
+          "title": "IoT Arduino and ESP8266",
+          "desc" : "Connect the world",
+          "media" : "https://assets.protocol.chat/avatars.frank.jpg",
+          "user_id": "2WrqwX824r@"
+        },
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a material {{ tag: 'GET', label: '/v1/materials/:material_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a material by providing their Protocol id. Refer to [the list](#the-material-model) at the top of this page to see which properties are included with material objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/materials/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/materials/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.materials.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.materials.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->materials->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+     "material_id": "WAz8eIbvDR60rouK",
+      "name": "IoT Essentials",
+      "description": "This course learn about IoT and Microcontroller",
+      "file": "https://assets.protocol.chat/avatars/frank.jpg",
+      "meeting": {
+          "date": "2023-04-25",
+          "course": {
+            "title": "IoT Arduino and ESP8266",
+            "desc" : "Connect the world",
+            "media" : "https://assets.protocol.chat/avatars.frank.jpg",
+            "user_id": "2WrqwX824r@"
+          },
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a material {{ tag: 'PUT', label: '/v1/materials/:material_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a material. Currently, the only attribute that can be updated on materials is the `name` and the `description` attribute which controls how a material appears in your material list in Protocol.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The material display name in the material list.
+      </Property>
+      <Property name="description" type="string">
+        The material display description in the material list.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/materials/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/materials/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d name="IoT Essentials"
+      -d description="Connect The World"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.materials.update('WAz8eIbvDR60rouK', {
+        name: 'IoT Essentials',
+        description: 'Connect The World',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.materials.update("WAz8eIbvDR60rouK", name="IoT Essentials")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->materials->update('WAz8eIbvDR60rouK', [
+      'name' => 'IoT Essentials',
+      'description' => 'Connect The World',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "material_id": "WAz8eIbvDR60rouK",
+      "name": "IoT Essentials",
+      "description": "This course learn about IoT and Microcontroller",
+        "file": "https://assets.protocol.chat/avatars/frank.jpg",
+        "meeting": {
+          "date": "2023-04-25",
+          "course": {
+            "title": "IoT Arduino and ESP8266",
+            "desc" : "Connect the world",
+            "media" : "https://assets.protocol.chat/avatars.frank.jpg",
+            "user_id": "2WrqwX824r@"
+          },
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a material {{ tag: 'DELETE', label: '/v1/materials/:material_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete materials from your material list in Protocol. Note: This will also delete your conversation with the given material.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/materials/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/materials/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.materials.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.materials.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->materials->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

@@ -1,0 +1,379 @@
+export const description =
+  'On this page, we’ll dive into the different discussion endpoints you can use to manage discussions programmatically.'
+
+# Discussion
+
+As the name suggests, discussion are a core part of Protocol. On this page, we'll dive into the different discussion endpoints you can use to manage discussions programmatically. We'll look at how to query, create, update, and delete discussions.
+
+## The discussion model
+
+The discussion model contains all the information about discussion, such as comment, the date when discussion was created, and the course information.
+
+### Properties
+
+<Properties>
+  <Property name="discussion_id" type="string">
+    Unique identifier for the discussion.
+  </Property>
+  <Property name="comment" type="string">
+    The comment for the course.
+  </Property>
+  <Property name="created_at" type="timestamp">
+    The created_at for the course.
+  </Property>
+  <Property name="user_id" type="string">
+    Unique identifier for the user associated with the discussion.
+  </Property>
+  <Property name="course_id" type="string">
+    Unique identifier for the course associated with the discussion.
+  </Property>
+</Properties>
+
+---
+
+## List all discussions {{ tag: 'GET', label: '/v1/discussion' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your discussions. By default, a maximum of ten discussions are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of discussions returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/discussions">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/discussions \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.discussions.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.discussions.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->discussions->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "discussion_id": "WAz8eIbvDR60rouK",
+          "comment": "I also have struggled on...",
+          "created_at": "2022-04-12",
+          "user_id": {
+              "name": "John Doe",
+              "username": "JohnDoe",
+          },
+          "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+          },
+        },
+        {
+          "discussion_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a discussion {{ tag: 'POST', label: '/v1/discussion' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new discussion list in Protocol. To add a discussion, you must provide their Protocol comment.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="comment" type="string">
+        The comment for the course.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/discussions">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/discussions \
+      -H "Authorization: Bearer {token}" \
+      -d comment="Good Job" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.discussions.create({
+      comment: "Good Job",
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.discussions.create(
+      comment= "Good Job",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->discussions->create([
+      'comment' => "Good Job",
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+        "discussion_id": "WAz8eIbvDR60rouK",
+        "comment": "Good Job",
+        "user": {
+            "name": "John Doe",
+            "username": "JohnDoe",
+          },
+          "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+          },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a discussion {{ tag: 'GET', label: '/v1/discussions/:discussion_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a discussion by providing their Protocol id. Refer to [the list](#the-discussion-model) at the top of this page to see which properties are included with discussion objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/discussions/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/discussions/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.discussions.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.discussions.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->discussions->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+        "discussion_id": "WAz8eIbvDR60rouK",
+        "comment": "Good Job",
+        "user": {
+            "name": "John Doe",
+            "username": "JohnDoe",
+          },
+          "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+          },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a discussion {{ tag: 'PUT', label: '/v1/discussions/:discussion_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a discussion. Currently, the only attribute that can be updated on discussions is the `user_id` and `course_id` attribute which controls how a discussion appears in your discussion list in Protocol.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="comment" type="string">
+        The comment for the course.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/discussions/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/discussions/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+        -d comment="Good Job" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.discussions.update('WAz8eIbvDR60rouK', {
+      comment: "Good Job",
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    cli ent = ApiClient(token)
+
+    client.discussions.update("WAz8eIbvDR60rouK",
+    course_id = "2cvj8*Wn",
+    user_id = "mis&2fKdqdcX"
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->discussions->update('WAz8eIbvDR60rouK', [
+      'comment' => "Good Job",
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+        "discussion_id": "WAz8eIbvDR60rouK",
+        "comment": "Good Job",
+        "user": {
+            "name": "John Doe",
+            "username": "JohnDoe",
+          },
+          "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+          },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a discussion {{ tag: 'DELETE', label: '/v1/discussions/:discussion_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete discussions from your discussion list in Protocol. Note: This will also delete your conversation with the given discussion.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/discussions/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/discussions/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.discussions.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.discussions.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->discussions->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

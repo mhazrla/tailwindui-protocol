@@ -1,0 +1,363 @@
+export const description =
+  'On this page, we’ll dive into the different task endpoints you can use to manage tasks programmatically.'
+
+# Tasks
+
+As the name suggests, tasks are a core part of Protocol. On this page, we'll dive into the different task endpoints you can use to manage tasks programmatically. We'll look at how to query, create, update, and delete tasks.
+
+## The task model
+
+The task model contains all the information about your tasks, such as their name and date. It also contains a reference to the forum between you and the course and information about this Protocol.
+
+### Properties
+
+<Properties>
+  <Property name="task_id" type="string">
+    Unique identifier for the task.
+  </Property>
+  <Property name="name" type="string">
+    The name for the task.
+  </Property>
+  <Property name="date" type="timestamp">
+    Timestamp of when the task was created.
+  </Property>
+  <Property name="user_id" type="string">
+    Unique identifier for the user associated with the task.
+  </Property>
+  <Property name="course_id" type="string">
+    Unique identifier for the course associated with the task.
+  </Property>
+</Properties>
+
+---
+
+## List all tasks {{ tag: 'GET', label: '/v1/tasks' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your tasks. By default, a maximum of ten tasks are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of tasks returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/tasks">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/tasks \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.tasks.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.tasks.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->tasks->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "task_id": "WAz8eIbvDR60rouK",
+          "name": "Node JS REST API",
+          "date": "2023-04-26",
+          "user_id": "xgQQXg3hrtjh7AvZ",
+          "course": {
+            "title": "Learn Python: The Complete Python Programming Course",
+            "media": "https://assets.protocol.chat/avatars/frank.jpg",
+            "description": "Learn A-Z everything about Python, from the basics, to advanced topics like Python GUI, Python Data Analysis, and more!",
+          },
+        },
+        {
+          "task_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a task {{ tag: 'POST', label: '/v1/tasks' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new task to your task list in Protocol. To add a task, you must provide their Protocol name.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The name for the task.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/tasks">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/tasks \
+      -H "Authorization: Bearer {token}" \
+      -d name="Node JS REST API" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.tasks.create({
+      name: 'Node JS REST API',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.tasks.create(
+      name="Node JS REST API",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->tasks->create([
+      'name' => 'Node JS REST API',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "task_id": "WAz8eIbvDR60rouK",
+      "name": "Node JS REST API",
+      "date": "2022-04-26"
+      "user_id": "xgQQXg3hrtjh7AvZ",
+      "course": {
+        "title": "Learn Python: The Complete Python Programming Course",
+        "media": "https://assets.protocol.chat/avatars/frank.jpg",
+        "description": "Learn A-Z everything about Python, from the basics, to advanced topics like Python GUI, Python Data Analysis, and more!",
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a task {{ tag: 'GET', label: '/v1/tasks/:task_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a task by providing their Protocol id. Refer to [the list](#the-task-model) at the top of this page to see which properties are included with task objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/tasks/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/tasks/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.tasks.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.tasks.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->tasks->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+     "task_id": "WAz8eIbvDR60rouK",
+      "name": "Node JS REST API",
+      "date": "2023-04-26",
+      "user_id": "xgQQXg3hrtjh7AvZ",
+      "course": {
+          "title": "Learn Python: The Complete Python Programming Course",
+          "media": "https://assets.protocol.chat/avatars/frank.jpg",
+          "description": "Learn A-Z everything about Python, from the basics, to advanced topics like Python GUI, Python Data Analysis, and more!",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a task {{ tag: 'PUT', label: '/v1/tasks/:task_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a task. Currently, the only attribute that can be updated on tasks is the `name` attribute which controls how a task appears in your task list in Protocol.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The task display name in the task list.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/tasks/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/tasks/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d name="Node JS REST API"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.tasks.update('WAz8eIbvDR60rouK', {
+        name: 'Node JS REST API',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.tasks.update("WAz8eIbvDR60rouK", name="Node JS REST API")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->tasks->update('WAz8eIbvDR60rouK', [
+      'name' => 'Node JS REST API',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "task_id": "WAz8eIbvDR60rouK",
+      "name": "Node JS REST API",
+      "date": "2023-04-26",
+      "user_id": "xgQQXg3hrtjh7AvZ",
+      "course": {
+          "title": "Learn Python: The Complete Python Programming Course",
+          "media": "https://assets.protocol.chat/avatars/frank.jpg",
+          "description": "Learn A-Z everything about Python, from the basics, to advanced topics like Python GUI, Python Data Analysis, and more!",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a task {{ tag: 'DELETE', label: '/v1/tasks/:task_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete tasks from your task list in Protocol. Note: This will also delete your conversation with the given task.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/tasks/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/tasks/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.tasks.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.tasks.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->tasks->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

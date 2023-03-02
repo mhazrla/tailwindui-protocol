@@ -1,0 +1,356 @@
+export const description =
+  'On this page, we’ll dive into the different meeting endpoints you can use to manage meeting programmatically.'
+
+# Meeting
+
+As the name suggests, meeting are a core part of Protocol. On this page, we'll dive into the different meeting endpoints you can use to manage meeting programmatically. We'll look at how to query, create, update, and delete meeting.
+
+## The meeting model
+
+The meeting model contains all the information about your meeting, such as their date. It also contains a reference to the course.
+
+### Properties
+
+<Properties>
+  <Property name="meeting_id" type="string">
+    Unique identifier for the meeting.
+  </Property>
+  <Property name="date" type="timestamp">
+    The date for the meeting.
+  </Property>
+  <Property name="course_id" type="string">
+    Unique identifier for the user associated with the course.
+  </Property>
+</Properties>
+
+---
+
+## List all meeting {{ tag: 'GET', label: '/v1/meeting' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your meeting. By default, a maximum of ten meeting are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of meeting returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/meeting">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/meeting \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.meeting.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.meeting.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->meeting->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "meeting_id": "WAz8eIbvDR60rouK",
+          "date": "2023-05-23",
+            "course": {
+              "title": "IoT Arduino and ESP8266",
+              "desc" : "Connect the world",
+              "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+              "user_id": "2WrqwX824r@"
+          },
+        },
+        {
+          "meeting_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a meeting {{ tag: 'POST', label: '/v1/meeting' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new meeting to your meeting list in Protocol. To add a meeting, you must provide their Protocol date.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="date" type="timestamp">
+        The date for the meeting.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/meeting">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/meeting \
+      -H "Authorization: Bearer {token}" \
+      -d date="2023-04-26" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.meeting.create({
+      date: '2023-04-25',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.meeting.create(
+      date="2023-04-24",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->meeting->create([
+      'date' => '2023-04-26',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+       "meeting_id": "WAz8eIbvDR60rouK",
+       "date": "2023-05-23",
+       "course": {
+            "title": "IoT Arduino and ESP8266",
+            "desc" : "Connect the world",
+            "media" : "https://assets.protocol.chat/avatars.frank.jpg",,
+            "user_id": "2WrqwX824r@"
+        },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a meeting {{ tag: 'GET', label: '/v1/meeting/:meeting_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a meeting by providing their Protocol id. Refer to [the list](#the-meeting-model) at the top of this page to see which properties are included with meeting objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/meeting/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/meeting/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.meeting.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.meeting.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->meeting->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+     "meeting_id": "WAz8eIbvDR60rouK",
+      "date": "2023-05-23",
+          "course": {
+            "title": "IoT Arduino and ESP8266",
+            "desc" : "Connect the world",
+            "media" : "https://assets.protocol.chat/avatars.frank.jpg",
+            "user_id": "2WrqwX824r@"
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a meeting {{ tag: 'PUT', label: '/v1/meeting/:meeting_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a meeting. Currently, the only attribute that can be updated on meeting is the `name` and the `date` attribute which controls how a meeting appears in your meeting list in Protocol.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The meeting display name in the meeting list.
+      </Property>
+      <Property name="date" type="timestamp">
+        The meeting display date in the meeting list.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/meeting/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/meeting/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d name="IoT Essentials"
+      -d date="Connect The World"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.meeting.update('WAz8eIbvDR60rouK', {
+        date: '2023-04-25',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.meeting.update("WAz8eIbvDR60rouK", name="IoT Essentials")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->meeting->update('WAz8eIbvDR60rouK', [
+      'date' => 'Connect The 2023-04-26
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "meeting_id": "WAz8eIbvDR60rouK",
+      "date": "2023-05-23",
+          "course": {
+            "title": "IoT Arduino and ESP8266",
+            "desc" : "Connect the world",
+            "media" : "https://assets.protocol.chat/avatars.frank.jpg",
+            "user_id": "2WrqwX824r@"
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a meeting {{ tag: 'DELETE', label: '/v1/meeting/:meeting_id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete meeting from your meeting list in Protocol. Note: This will also delete your conversation with the given meeting.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/meeting/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/meeting/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.meeting.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.meeting.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->meeting->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
