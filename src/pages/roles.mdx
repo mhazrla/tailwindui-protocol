@@ -1,0 +1,309 @@
+export const description =
+  'On this page, we’ll dive into the different role endpoints you can use to manage roles programmatically.'
+
+# Role
+
+As the name suggests,  Role is a position or purpose that someone or something has in a situation that can use to manage many things programmatically. We'll look at how to query, create, update, and delete courses. {{ className: 'lead' }}
+
+## The role model
+
+The role model contains all the information about your roles, such as their Facilitator or Participant.
+
+### Properties
+
+<Properties>
+  <Property name="role_id" type="string">
+    Unique identifier for the role.
+  </Property>
+  <Property name="role_name" type="string">
+    The role_name for the role.
+  </Property>
+</Properties>
+
+---
+
+## List all roles {{ tag: 'GET', label: '/v1/roles' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your roles. 
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/roles">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/roles \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.roles.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.roles.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->roles->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "role_id": "WAz8eIbvDR60rouK",
+          "role_name": "Facilitator",
+        },
+        {
+          "role_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a role {{ tag: 'POST', label: '/v1/roles' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new role to your role list in Protocol. To add a role, you must provide their Protocol role name.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="role_name" type="string">
+        The role_name for the role.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/roles">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/roles \
+      -H "Authorization: Bearer {token}" \
+      -d role_name="Facilitator" \
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.roles.create({
+      role_name: 'Facilitator',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.roles.create(
+      role_name="Facilitator",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->roles->create([
+      'role_name' => 'Facilitator',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "WAz8eIbvDR60rouK",
+      "role_name": "Facilitator",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a role {{ tag: 'GET', label: '/v1/roles/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a role by providing their Protocol id. Refer to [the list](#the-role-model) at the top of this page to see which properties are included with role objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/roles/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/roles/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.roles.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.roles.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->roles->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "WAz8eIbvDR60rouK",
+      "role_name": "Facilitator",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a role {{ tag: 'PUT', label: '/v1/roles/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a role. Currently, the only attribute that can be updated on roles is the `role_name` attribute which controls how a role appears in your role list in Protocol.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/roles/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/roles/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d role_name="Facilitator"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.roles.update('WAz8eIbvDR60rouK', {
+        role_name: 'Facilitator',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.roles.update("WAz8eIbvDR60rouK", role_name="Facilitator")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->roles->update('WAz8eIbvDR60rouK', [
+      'role_name' => 'Facilitator',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "id": "WAz8eIbvDR60rouK",
+      "role_name": "Facilitator",
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a role {{ tag: 'DELETE', label: '/v1/roles/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete roles from your role list in Protocol. Note: This will also delete your courses, discussion, and etc with the given role.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/roles/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/roles/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.roles.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.roles.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->roles->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>

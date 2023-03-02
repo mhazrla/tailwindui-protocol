@@ -1,0 +1,417 @@
+export const description =
+  'On this page, we’ll dive into the different user endpoints you can use to manage users programmatically.'
+
+# Users
+
+As the name suggests, users are a core part of Protocol — the very reason Protocol exists is so you can have secure conversations with your users. On this page, we'll dive into the different user endpoints you can use to manage users programmatically. We'll look at how to query, create, update, and delete users.
+
+## The user model
+
+The user model contains all the information about your users, such as their username, avatar, and username. It also contains a reference to the conversation between you and the user and information about when they were last active on Protocol.
+
+### Properties
+
+<Properties>
+  <Property name="user_id" type="string">
+    Unique identifier for the user.
+  </Property>
+  <Property name="name" type="string">
+    The name for the user.
+  </Property>
+  <Property name="username" type="string">
+    The username for the user.
+  </Property>
+  <Property name="email" type="string">
+    The user email in the user list. 
+  </Property>
+  <Property name="password" type="string">
+    The user password in the user list. 
+  </Property>
+  <Property name="role_id" type="string">
+    Unique identifier for the role associated with the user.
+  </Property>
+</Properties>
+
+---
+
+## List all users {{ tag: 'GET', label: '/v1/users' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your users. By default, a maximum of ten users are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of users returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/users">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://api.protocol.chat/v1/users \
+      -H "Authorization: Bearer {token}" \
+      -d active=true \
+      -d limit=10
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.list()
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.list()
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->list();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "has_more": false,
+      "data": [
+        {
+          "user_id": "WAz8eIbvDR60rouK",
+          "name" :"John Doe",
+          "username": "john123",
+          "email": "john@gmail.com",
+          "password": "$2Sjio.35H9H23!F/",
+          "role": {
+              "role_id": "inEIRvzjC6YLMX3o",
+              ""role_name": "Facilitator",
+            },
+          
+        },
+        {
+          "user_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a user {{ tag: 'POST', label: '/v1/users' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new user to your user list in Protocol. To add a user, you must provide their Protocol name,  username, email, password, and their role.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The name for the user.
+      </Property>
+      <Property name="username" type="string">
+        The username for the user.
+      </Property>
+      <Property name="email" type="string">
+        The user email for the user. 
+      </Property>
+      <Property name="password" type="string">
+        The user password for the user. 
+      </Property>
+      <Property name="role_id" type="string">
+        Unique identifier for the role associated with the user.
+      </Property>
+    </Properties>
+
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/v1/users">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/users \
+      -H "Authorization: Bearer {token}" \
+      -d name="John Doe" \
+      -d username="john123" \
+      -d email="john@gmail.com" \
+      -d password="$2D2das/5q32." \
+      -d role_id="inEIRvzjC6YLMX3o" \
+
+      
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.create({
+      name: 'John Doe',
+      username: 'john123',
+      email: 'john@gmail.com',
+      password: '$2D2das/5q32.',
+      role_id: 'inEIRvzjC6YLMX3o',
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.create(
+      name="John Doe",
+      username="john123",
+      email="john@gmail.com",
+      password="$2D2das/5q32.",
+      role_id="inEIRvzjC6YLMX3o",
+    )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->create([
+      'name' => 'John Doe',
+      'username' => 'john123',
+      'email' => 'john@gmail.com',
+      'password' => '$2D2das/5q32',
+      'role_id' => 'inEIRvzjC6YLMX3o',
+    ]);
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "user_id": "WAz8eIbvDR60rouK",
+      "name" :"John Doe",
+      "username": "john123",
+      "email": "john@gmail.com",
+      "password": "$2Sjio.35H9H23!F/",
+      "role": {
+        "role_id": "inEIRvzjC6YLMX3o",
+        ""role_name": "Facilitator",
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a user {{ tag: 'GET', label: '/v1/users/:username' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a user by providing their Protocol username. Refer to [the list](#the-user-model) at the top of this page to see which properties are included with user objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.get('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.get("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->get('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "user_id": "WAz8eIbvDR60rouK",
+      "name" :"John Doe",
+      "username": "john123",
+      "email": "john@gmail.com",
+      "password": "$2Sjio.35H9H23!F/",
+      "role": {
+        "role_id": "inEIRvzjC6YLMX3o",
+        "role_name": "Facilitator",
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a user {{ tag: 'PUT', label: '/v1/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a user. Currently, the only attribute that can be updated on users is the `name`,`username`,`email`,`password`,`role` attribute which controls how a user appears in your user list in Protocol.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The user name in the user list. By default, this is just the username.
+      </Property>
+      <Property name="username" type="string">
+        The user username in the user list. By default, this is just the username.
+      </Property>
+      <Property name="email" type="string">
+        The user email in the user list. By default, this is just the username.
+      </Property>
+      <Property name="password" type="string">
+        The user password in the user list. By default, this is just the username.
+      </Property>
+      <Property name="role_id" type="string">
+        The user role_id in the user list. By default, this is just the username.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PUT" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PUT https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}" \
+      -d name="Doe John"
+      -d username="doejohn123"
+      -d email="john321@gmail.com"
+      -d password="$2afSFjn5./a"
+      -d role_id="$2NGaoro/2"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.update('WAz8eIbvDR60rouK', {
+        name="Doe John"
+        username="doejohn123"
+        email="john321@gmail.com"
+        password="$2afSFjn5./a"
+        role_id="$2NGaoro/2"
+    })
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.update("WAz8eIbvDR60rouK", email="john321@gmail.com",username="doejohn123",name="Doe John",password="$2afSFjn5./a", role_id="$2NGaoro/2" )
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->update('WAz8eIbvDR60rouK', [
+      'email' => 'UncleFrank',
+    ]);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "user_id": "WAz8eIbvDR60rouK",
+      "name" :"John Doe",
+      "username": "john123",
+      "email": "john@gmail.com",
+      "password": "$2Sjio.35H9H23!F/",
+      "role": {
+        "role_id": "inEIRvzjC6YLMX3o",
+        "role_name": "Facilitator",
+      },
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a user {{ tag: 'DELETE', label: '/v1/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete users from your user list in Protocol. Note: This will also delete your conversation with the given user.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/v1/users/WAz8eIbvDR60rouK">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE https://api.protocol.chat/v1/users/WAz8eIbvDR60rouK \
+      -H "Authorization: Bearer {token}"
+    ```
+
+    ```js
+    import ApiClient from '@example/protocol-api'
+
+    const client = new ApiClient(token)
+
+    await client.users.delete('WAz8eIbvDR60rouK')
+    ```
+
+    ```python
+    from protocol_api import ApiClient
+
+    client = ApiClient(token)
+
+    client.users.delete("WAz8eIbvDR60rouK")
+    ```
+
+    ```php
+    $client = new \Protocol\ApiClient($token);
+
+    $client->users->delete('WAz8eIbvDR60rouK');
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
