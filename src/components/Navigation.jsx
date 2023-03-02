@@ -201,6 +201,7 @@ export const navigation = [
     links: [
       { title: 'Roles', href: '/roles' },
       { title: 'Users', href: '/users' },
+      { title: 'Courses', href: '/courses' },
       { title: 'Contacts', href: '/contacts' },
       { title: 'Conversations', href: '/conversations' },
       { title: 'Messages', href: '/messages' },

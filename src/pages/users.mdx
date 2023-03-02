@@ -97,7 +97,7 @@ The user model contains all the information about your users, such as their user
           "password": "$2Sjio.35H9H23!F/",
           "role": {
               "role_id": "inEIRvzjC6YLMX3o",
-              ""role_name": "Facilitator",
+              "role_name": "Facilitator",
             },
           
         },
@@ -209,7 +209,7 @@ The user model contains all the information about your users, such as their user
       "password": "$2Sjio.35H9H23!F/",
       "role": {
         "role_id": "inEIRvzjC6YLMX3o",
-        ""role_name": "Facilitator",
+        "role_name": "Facilitator",
       },
     }
     ```
@@ -279,7 +279,7 @@ The user model contains all the information about your users, such as their user
 
 ---
 
-## Update a user {{ tag: 'PUT', label: '/v1/users/:id' }}
+## Update a user {{ tag: 'PUT', label: '/v1/users/:user_id' }}
 
 <Row>
   <Col>
@@ -298,12 +298,6 @@ The user model contains all the information about your users, such as their user
       <Property name="email" type="string">
         The user email in the user list. By default, this is just the username.
       </Property>
-      <Property name="password" type="string">
-        The user password in the user list. By default, this is just the username.
-      </Property>
-      <Property name="role_id" type="string">
-        The user role_id in the user list. By default, this is just the username.
-      </Property>
     </Properties>
 
   </Col>
@@ -317,8 +311,6 @@ The user model contains all the information about your users, such as their user
       -d name="Doe John"
       -d username="doejohn123"
       -d email="john321@gmail.com"
-      -d password="$2afSFjn5./a"
-      -d role_id="$2NGaoro/2"
     ```
 
     ```js
@@ -330,8 +322,6 @@ The user model contains all the information about your users, such as their user
         name="Doe John"
         username="doejohn123"
         email="john321@gmail.com"
-        password="$2afSFjn5./a"
-        role_id="$2NGaoro/2"
     })
     ```
 
@@ -340,14 +330,16 @@ The user model contains all the information about your users, such as their user
 
     client = ApiClient(token)
 
-    client.users.update("WAz8eIbvDR60rouK", email="john321@gmail.com",username="doejohn123",name="Doe John",password="$2afSFjn5./a", role_id="$2NGaoro/2" )
+    client.users.update("WAz8eIbvDR60rouK", email="john321@gmail.com",username="doejohn123",name="Doe John" )
     ```
 
     ```php
     $client = new \Protocol\ApiClient($token);
 
     $client->users->update('WAz8eIbvDR60rouK', [
-      'email' => 'UncleFrank',
+      'name'=> "Doe John"
+      'username'=> "doejohn123"
+      'email'=> "john321@gmail.com"
     ]);
     ```
 
@@ -356,9 +348,9 @@ The user model contains all the information about your users, such as their user
     ```json {{ title: 'Response' }}
     {
       "user_id": "WAz8eIbvDR60rouK",
-      "name" :"John Doe",
-      "username": "john123",
-      "email": "john@gmail.com",
+      "name" :"Doe John",
+      "username": "doejohn123",
+      "email": "john321@gmail.com",
       "password": "$2Sjio.35H9H23!F/",
       "role": {
         "role_id": "inEIRvzjC6YLMX3o",
@@ -372,7 +364,7 @@ The user model contains all the information about your users, such as their user
 
 ---
 
-## Delete a user {{ tag: 'DELETE', label: '/v1/users/:id' }}
+## Delete a user {{ tag: 'DELETE', label: '/v1/users/:user_id' }}
 
 <Row>
   <Col>
